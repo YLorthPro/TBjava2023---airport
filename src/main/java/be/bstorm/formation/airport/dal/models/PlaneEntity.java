@@ -17,11 +17,10 @@ public class PlaneEntity {
     private Set<OwnerEntity> ownerEntities = new LinkedHashSet<>();
 
     @ManyToOne
-    @JoinColumn(name = "intervention_id")
-    private InterventionEntity interventionEntity;
-
-    @ManyToOne
     @JoinColumn(name = "plane_type_id")
     private PlaneTypeEntity planeTypeEntity;
+
+    @OneToMany(orphanRemoval = true, mappedBy = "planeEntity")
+    private Set<InterventionEntity> interventionEntities = new LinkedHashSet<>();
 
 }

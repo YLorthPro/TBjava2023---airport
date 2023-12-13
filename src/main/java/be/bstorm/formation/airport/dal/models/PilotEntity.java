@@ -16,5 +16,5 @@ public class PilotEntity extends PersonEntity{
     private int licenseNumber;
 
     @OneToMany(mappedBy = "pilot")
-    private List<ToPilotEntity> planeTypes;
+    private List<ToPilotEntity> toPilotEntityList;
 }

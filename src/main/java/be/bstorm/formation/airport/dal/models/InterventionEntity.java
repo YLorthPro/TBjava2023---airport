@@ -44,7 +44,7 @@ public class InterventionEntity {
     @JoinColumn(name = "repairman_id")
     private MachinistEntity repairman;
 
-    @OneToMany(mappedBy = "interventionEntity", orphanRemoval = true)
-    private Set<PlaneEntity> planeEntities = new LinkedHashSet<>();
-
+    @ManyToOne
+    @JoinColumn(name = "plane_id")
+    private PlaneEntity planeEntity;
 }
