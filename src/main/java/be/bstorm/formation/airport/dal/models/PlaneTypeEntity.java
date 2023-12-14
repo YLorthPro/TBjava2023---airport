@@ -41,6 +41,6 @@ public class PlaneTypeEntity {
     private Set<MachinistEntity> machinistEntities = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "planeType")
-    private List<ToPilotEntity> pilots;
+    private List<ToPilotEntity> toPilots;
 
 }

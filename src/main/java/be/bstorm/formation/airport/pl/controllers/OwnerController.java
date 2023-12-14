@@ -5,6 +5,7 @@ import be.bstorm.formation.airport.pl.models.dto.Owner;
 import be.bstorm.formation.airport.pl.models.dto.Owner;
 import be.bstorm.formation.airport.pl.models.forms.OwnerForm;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,30 +21,30 @@ public class OwnerController {
         this.ownerService = ownerService;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<Owner>> getAll() {
         return ResponseEntity.ok(ownerService.getAll().stream()
                 .map(Owner::fromBll)
                 .toList());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id:[0-9]+}")
     public ResponseEntity<Owner> getById(@PathVariable Long id) {
         return ResponseEntity.ok(Owner.fromBll(ownerService.getById(id).orElseThrow(()->new EntityNotFoundException("owner not found"))));
     }
 
-    @PostMapping
+    @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
-    public void create(@RequestBody OwnerForm form) {
+    public void create(@RequestBody @Valid OwnerForm form) {
         ownerService.save(form);
     }
 
-    @PutMapping("/{id}")
-    public void update(@RequestBody OwnerForm form, @PathVariable Long id) {
+    @PutMapping("/{id:[0-9]+}")
+    public void update(@RequestBody @Valid OwnerForm form, @PathVariable Long id) {
         ownerService.update(form, id);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id:[0-9]+}")
     public void delete(@PathVariable Long id) {
         ownerService.deleteById(id);
     }
