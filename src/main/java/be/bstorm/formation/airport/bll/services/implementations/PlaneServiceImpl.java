@@ -9,6 +9,7 @@ import be.bstorm.formation.airport.pl.models.forms.PlaneForm;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -45,7 +46,7 @@ public class PlaneServiceImpl implements PlaneService {
 
         PlaneEntity entity = new PlaneEntity();
         entity.setNumIma(form.numIma());
-        entity.setOwnerEntities(new HashSet<>(ownerRepository.findAllById(form.ownersId())));
+        entity.setOwnerEntities(new ArrayList<>(ownerRepository.findAllById(form.ownersId())));
         entity.setPlaneTypeEntity(planeTypeRepository.findById(entity.getPlaneTypeEntity().getId()).orElseThrow(() -> new EntityNotFoundException("Plane not found")));
         planeRepository.save(entity);
     }
@@ -57,7 +58,7 @@ public class PlaneServiceImpl implements PlaneService {
 
         PlaneEntity entity = planeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Plane not found"));
         entity.setNumIma(form.numIma());
-        entity.setOwnerEntities(new HashSet<>(ownerRepository.findAllById(form.ownersId())));
+        entity.setOwnerEntities(new ArrayList<>(ownerRepository.findAllById(form.ownersId())));
         entity.setPlaneTypeEntity(planeTypeRepository.findById(entity.getPlaneTypeEntity().getId()).orElseThrow(() -> new EntityNotFoundException("Plane type not found")));
         planeRepository.save(entity);
     }

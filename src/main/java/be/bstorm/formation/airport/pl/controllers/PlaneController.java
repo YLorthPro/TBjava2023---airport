@@ -28,7 +28,7 @@ public class PlaneController {
                 .toList());
     }
 
-    @GetMapping("/{id:[0-9]+}")
+    @GetMapping("/{id}")
     public ResponseEntity<Plane> getOne(@PathVariable String id){
         return ResponseEntity.ok(planeService.getById(id)
                 .map(Plane::fromBll)
@@ -41,12 +41,12 @@ public class PlaneController {
         planeService.save(form);
     }
 
-    @PutMapping("/{id:[0-9]+}")
+    @PutMapping("/{id}")
     public void update(@RequestBody @Valid PlaneForm form, @PathVariable String id) {
         planeService.update(form, id);
     }
 
-    @DeleteMapping("/{id:[0-9]+}")
+    @DeleteMapping("/{id}")
     public void delete(@PathVariable String id) {
         planeService.deleteById(id);
     }

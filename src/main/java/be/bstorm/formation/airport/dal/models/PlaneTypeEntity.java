@@ -3,6 +3,7 @@ package be.bstorm.formation.airport.dal.models;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -38,7 +39,7 @@ public class PlaneTypeEntity {
     }
 
     @ManyToMany(mappedBy = "planeTypeEntities")
-    private Set<MachinistEntity> machinistEntities = new LinkedHashSet<>();
+    private List<MachinistEntity> machinistEntities = new ArrayList<>();
 
     @OneToMany(mappedBy = "planeType")
     private List<ToPilotEntity> toPilots;

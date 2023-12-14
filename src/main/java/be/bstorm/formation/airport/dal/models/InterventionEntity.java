@@ -20,7 +20,7 @@ public class InterventionEntity {
     @Column(nullable = false, columnDefinition = "DATE CHECK (date <= CURRENT_DATE)")
     private LocalDate date;
     @Column(name = "duree", nullable = false, columnDefinition = "INT CHECK (duree > 0)")
-    private double duration;
+    private int duration;
 
 
     public void setDate(LocalDate date) {
@@ -30,7 +30,7 @@ public class InterventionEntity {
         this.date = date;
     }
 
-    public void setDuration(double duration) {
+    public void setDuration(int duration) {
         if(duration <= 0)
             throw new IllegalArgumentException("Duration must be positive");
         this.duration = duration;

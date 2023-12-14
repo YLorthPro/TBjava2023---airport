@@ -45,9 +45,6 @@ public class PilotServiceImpl implements PilotService {
         return pilotRepository.findById(id);
     }
 
-    /**
-     *
-     */
     @Override
     public void save(PilotForm form) {
         if(form == null)

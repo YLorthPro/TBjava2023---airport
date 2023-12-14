@@ -8,6 +8,7 @@ import be.bstorm.formation.airport.pl.models.forms.MachinistForm;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -44,7 +45,7 @@ public class MachinistServiceImpl implements MachinistService {
         entity.setName(form.name());
         entity.setAddress(form.address());
         entity.setPhone(form.phone());
-        entity.setPlaneTypeEntities(new HashSet<>(planeTypeRepository.findAllById(form.planeTypeId())));
+        entity.setPlaneTypeEntities(new ArrayList<>(planeTypeRepository.findAllById(form.planeTypeId())));
         machinistRepository.save(entity);
     }
 
@@ -64,7 +65,7 @@ public class MachinistServiceImpl implements MachinistService {
         entity.setName(form.name());
         entity.setAddress(form.address());
         entity.setPhone(form.phone());
-        entity.setPlaneTypeEntities(new HashSet<>(planeTypeRepository.findAllById(form.planeTypeId())));
+        entity.setPlaneTypeEntities(new ArrayList<>(planeTypeRepository.findAllById(form.planeTypeId())));
         machinistRepository.save(entity);
     }
 

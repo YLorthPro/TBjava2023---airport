@@ -3,7 +3,9 @@ package be.bstorm.formation.airport.dal.models;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -14,6 +16,6 @@ public class MachinistEntity extends PersonEntity{
     @JoinTable(name = "est_habilite",
             joinColumns = @JoinColumn(name = "machinist_id"),
             inverseJoinColumns = @JoinColumn(name = "planeType_id"))
-    private Set<PlaneTypeEntity> planeTypeEntities = new LinkedHashSet<>();
+    private List<PlaneTypeEntity> planeTypeEntities = new ArrayList<>();
 
 }

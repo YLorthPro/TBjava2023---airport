@@ -3,6 +3,7 @@ package be.bstorm.formation.airport.pl.models.dto;
 import be.bstorm.formation.airport.dal.models.PilotEntity;
 import be.bstorm.formation.airport.dal.models.ToPilotEntity;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -12,7 +13,7 @@ public record Pilot(
         String address,
         String phone,
         int licenseNumber,
-        Set<PlaneType> planeTypes,
+        List<PlaneType> planeTypes,
         int flightsNumber){
     public static Pilot fromBll(PilotEntity entity){
         return new Pilot(
@@ -23,7 +24,7 @@ public record Pilot(
                 entity.getLicenseNumber(),
                 entity.getToPilotEntityList().stream()
                         .map(toPilotEntity -> PlaneType.fromBll(toPilotEntity.getPlaneType()))
-                        .collect(Collectors.toSet()),
+                        .toList(),
                 entity.getToPilotEntityList().stream()
                         .mapToInt(ToPilotEntity::getFlightsNumber)
                         .sum()

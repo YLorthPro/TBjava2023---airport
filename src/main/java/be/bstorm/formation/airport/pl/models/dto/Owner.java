@@ -2,6 +2,7 @@ package be.bstorm.formation.airport.pl.models.dto;
 
 
 import be.bstorm.formation.airport.dal.models.OwnerEntity;
+import be.bstorm.formation.airport.dal.models.PlaneEntity;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -11,7 +12,7 @@ public record Owner(
         String name,
         String address,
         String phone,
-        Set<Plane> planes
+        Set<String> planes
 ) {
     public static Owner fromBll(OwnerEntity entity){
         return new Owner(
@@ -20,7 +21,7 @@ public record Owner(
                 entity.getAddress(),
                 entity.getPhone(),
                 entity.getPlaneEntities().stream()
-                        .map(Plane::fromBll)
+                        .map(PlaneEntity::getNumIma)
                         .collect(Collectors.toSet())
         );
     }

@@ -14,7 +14,7 @@ public record InterventionForm(
         @PastOrPresent
         LocalDate date,
         @Positive
-        double duration,
+        int duration,
         @NotNull
         @Positive
         long verifierId,
