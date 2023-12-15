@@ -5,6 +5,11 @@ import lombok.Data;
 
 @Entity
 @Data
+/*
+ L'annotation Inheritance est utilisée pour définir la stratégie d'héritage à utiliser pour une hiérarchie de classe.
+ InheritanceType.JOINED est une stratégie qui mappe chaque classe concrète à sa propre table.
+ Les colonnes qui sont héritées sont incluses dans chaque table.
+ */
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "Personne")
 public abstract class PersonEntity {

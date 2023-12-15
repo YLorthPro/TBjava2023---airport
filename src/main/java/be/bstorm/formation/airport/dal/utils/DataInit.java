@@ -10,7 +10,6 @@ import com.github.javafaker.Faker;
 import java.util.*;
 
 @Component
-
 public class DataInit implements InitializingBean {
 
     private final PlaneTypeRepository planeTypeRepository;

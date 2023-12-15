@@ -5,6 +5,7 @@ import be.bstorm.formation.airport.bll.services.PilotService;
 import be.bstorm.formation.airport.dal.models.PilotEntity;
 import be.bstorm.formation.airport.dal.models.PlaneTypeEntity;
 import be.bstorm.formation.airport.dal.models.ToPilotEntity;
+import be.bstorm.formation.airport.dal.models.ToPilotEntityCompositeKey;
 import be.bstorm.formation.airport.dal.repositories.ToPilotRepository;
 import be.bstorm.formation.airport.dal.repositories.PilotRepository;
 import be.bstorm.formation.airport.dal.repositories.PlaneTypeRepository;
@@ -12,6 +13,7 @@ import be.bstorm.formation.airport.pl.models.dto.Pilot;
 import be.bstorm.formation.airport.pl.models.dto.PlaneType;
 import be.bstorm.formation.airport.pl.models.forms.PilotForm;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -55,6 +57,19 @@ public class PilotServiceImpl implements PilotService {
         pilotEntity.setAddress(form.address());
         pilotEntity.setPhone(form.phone());
         pilotEntity.setLicenseNumber(form.licenseNumber());
+        /*
+        la méthode findAllById récupère tous les types d'avions dans `planeTypeRepository`
+        correspondant aux ID fournis par `form.planeTypes()`.
+
+        Le résultat est ensuite transformé en un Stream pour pouvoir manipuler les données en utilisant Java Stream API.
+
+        La méthode flatMap, elle s'applique à chaque élément du Stream et remplace chaque élément par le contenu de ce Stream.
+        Elle est généralement utilisée pour aplatir une structure de données complexe. Dans ce cas,
+        nous remplaçons chaque type d'avion par sa liste de pilotes (`pt.getToPilots().stream()`).
+
+        Enfin, la méthode distinct filtre le Stream pour s'assurer que tous les pilotes sont uniques, éliminant ainsi les doublons.
+        Le résultat est un Stream de pilotes uniques pour les types d'avions spécifiés.
+        */
         pilotEntity.setToPilotEntityList(planeTypeRepository.findAllById(form.planeTypes()).stream()
                 .flatMap(pt->pt.getToPilots().stream().distinct())
                 .toList()
@@ -89,7 +104,31 @@ public class PilotServiceImpl implements PilotService {
         PlaneTypeEntity planeTypeEntity = planeTypeRepository.findById(planeTypeId).orElseThrow(()->new EntityNotFoundException("Plane type not found"));
         PilotEntity pilotEntity = pilotRepository.findById(pilotId).orElseThrow(()-> new EntityNotFoundException("Pilot not found"));
 
-        ToPilotEntity toPilotEntity = toPilotRepository.findByPilotAndPlaneType(pilotEntity,planeTypeEntity).orElseThrow(()->new EntityNotFoundException("Resume not found"));
+        // Tente de rechercher une entité "ToPilotEntity" existante dans la base de données en utilisant les entités "pilotEntity" et "planeTypeEntity" respectivement comme clé de pilote et type d'avion
+        ToPilotEntity toPilotEntity = toPilotRepository.findByPilotAndPlaneType(pilotEntity, planeTypeEntity)
+                // Si aucune entité correspondante n'est trouvée, exécute la méthode orElseGet() qui crée une nouvelle entité
+                .orElseGet(()->{
+                    // Création d'une nouvelle instance de ToPilotEntity
+                    ToPilotEntity toPilot = new ToPilotEntity();
+
+                    // Définition de pilotEntity comme pilote de l'entité toPilot
+                    toPilot.setPilot(pilotEntity);
+
+                    // Définition de planeTypeEntity comme type d'avion de l'entité toPilot
+                    toPilot.setPlaneType(planeTypeEntity);
+
+                    // Création d'une nouvelle clé composite avec pilotEntity et planeTypeEntity,
+                    // puis assignation de cette clé comme ID de l'entité toPilot
+                    ToPilotEntityCompositeKey key = new ToPilotEntityCompositeKey(pilotEntity,planeTypeEntity);
+                    toPilot.setId(key);
+
+                    // Initialisation du nombre de vols à 0
+                    toPilot.setFlightsNumber(0);
+
+                    // Sauvegarde de l'entité toPilot nouvellement créée dans la base de données,
+                    // puis retourne cette entité en cas d'absence de l'entité recherchée initialement
+                    return toPilotRepository.save(toPilot);
+                });
 
         toPilotEntity.setFlightsNumber(toPilotEntity.getFlightsNumber()+1);
 
