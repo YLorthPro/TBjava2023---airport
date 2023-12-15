@@ -4,9 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Data
@@ -17,5 +15,9 @@ public class MachinistEntity extends PersonEntity{
             joinColumns = @JoinColumn(name = "machinist_id"),
             inverseJoinColumns = @JoinColumn(name = "planeType_id"))
     private List<PlaneTypeEntity> planeTypeEntities = new ArrayList<>();
+
+    public boolean isQualifiedFor(PlaneEntity plane) {
+        return planeTypeEntities.contains(plane.getPlaneTypeEntity());
+    }
 
 }

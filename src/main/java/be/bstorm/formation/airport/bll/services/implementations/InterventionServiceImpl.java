@@ -46,7 +46,7 @@ public class InterventionServiceImpl implements InterventionService {
         if (form.repairmanId()== form.verifierId())
             throw new IllegalArgumentException("Verifier can't be the repairman");
 
-        if(!machinistRepository.findById(form.repairmanId()).orElseThrow(()->new EntityNotFoundException("Repairman not found")).getPlaneTypeEntities().contains(planeRepository.findById(form.planeId()).orElseThrow(()->new EntityNotFoundException("Plane not found")).getPlaneTypeEntity()))
+        if(!machinistRepository.findById(form.repairmanId()).orElseThrow(() -> new EntityNotFoundException("Repairman not found")).isQualifiedFor(planeRepository.findById(form.planeId()).orElseThrow(() -> new EntityNotFoundException("Plane not found"))))
             throw new IllegalArgumentException("Repaiman has no abilities for this plane");
 
         InterventionEntity entity = new InterventionEntity();

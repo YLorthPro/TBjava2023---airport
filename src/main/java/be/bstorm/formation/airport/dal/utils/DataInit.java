@@ -7,7 +7,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import com.github.javafaker.Faker;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class DataInit implements InitializingBean {
@@ -21,28 +24,31 @@ public class DataInit implements InitializingBean {
 
     @Value("${api.data-init}")
     private boolean insertion;
+    private final InterventionRepository interventionRepository;
 
     public DataInit(PlaneTypeRepository planeTypeRepository,
                     OwnerRepository ownerRepository,
                     PilotRepository pilotRepository,
                     PlaneRepository planeRepository,
                     MachinistRepository machinistRepository,
-                    ToPilotRepository toPilotRepository) {
+                    ToPilotRepository toPilotRepository,
+                    InterventionRepository interventionRepository) {
         this.planeTypeRepository = planeTypeRepository;
         this.ownerRepository = ownerRepository;
         this.pilotRepository = pilotRepository;
         this.planeRepository = planeRepository;
         this.machinistRepository = machinistRepository;
         this.toPilotRepository = toPilotRepository;
+        this.interventionRepository = interventionRepository;
     }
 
     @Override
     public void afterPropertiesSet() throws Exception {
         if(insertion){
-            Faker faker = new Faker();
+            Faker faker = new Faker(new Locale("fr"));
             for (int i = 0; i < 50; i++) {
                 PlaneTypeEntity planeType = new PlaneTypeEntity();
-                planeType.setName(faker.lorem().word());
+                planeType.setName(faker.aviation().aircraft());
                 planeType.setBuilder(faker.company().name());
                 planeType.setPower(faker.number().numberBetween(100, 1000));
                 planeType.setSeatsNumber(faker.number().numberBetween(2, 200));
@@ -51,7 +57,7 @@ public class DataInit implements InitializingBean {
             List<OwnerEntity> owners = new ArrayList<>();
             for (int i = 0; i < 50; i++) {
                 OwnerEntity owner = new OwnerEntity();
-                owner.setName(faker.name().fullName());
+                owner.setName(faker.artist().name());
                 owner.setAddress(faker.address().fullAddress());
                 owner.setPhone(faker.phoneNumber().phoneNumber());
                 owners.add(owner);
@@ -65,6 +71,7 @@ public class DataInit implements InitializingBean {
                 pilot.setLicenseNumber(faker.number().numberBetween(10000, 99999));
                 pilotRepository.save(pilot);
             }
+            List<PlaneEntity> planes = new ArrayList<>();
             for (int i = 0; i < 50; i++) {
                 PlaneEntity plane = new PlaneEntity();
                 plane.setNumIma(faker.lorem().word());
@@ -73,11 +80,12 @@ public class DataInit implements InitializingBean {
                 plane.setOwnerEntities(List.of(owners.get(a)));
                 owners.remove(a);
                 plane.setInterventionEntities(new ArrayList<>());
+                planes.add(plane);
                 planeRepository.save(plane);
             }
             for (int i = 0; i < 50; i++) {
                 MachinistEntity machinist = new MachinistEntity();
-                machinist.setName(faker.name().fullName());
+                machinist.setName(faker.howIMetYourMother().character());
                 machinist.setAddress(faker.address().fullAddress());
                 machinist.setPhone(faker.phoneNumber().phoneNumber());
 
@@ -88,17 +96,19 @@ public class DataInit implements InitializingBean {
                 ToPilotEntity toPilot = new ToPilotEntity();
                 ToPilotEntityCompositeKey toPilotEntityCompositeKey = new ToPilotEntityCompositeKey();
 
-                PilotEntity pilot = pilotRepository.findById((long) faker.number().numberBetween(1, 50)).orElse(null);
+                PilotEntity pilot = pilotRepository.findById((long) faker.number().numberBetween(51, 100)).orElse(null);
                 PlaneTypeEntity planeType = planeTypeRepository.findById((long) faker.number().numberBetween(1, 50)).orElse(null);
 
                 if (pilot != null) {
                     toPilotEntityCompositeKey.setPilotId(pilot.getId());
+                    toPilot.setPilot(pilot);
                 } else {
                     continue;
                 }
 
                 if (planeType != null) {
                     toPilotEntityCompositeKey.setPlaneTypeId(planeType.getId());
+                    toPilot.setPlaneType(planeType);
                 } else {
                     continue;
                 }
@@ -108,6 +118,7 @@ public class DataInit implements InitializingBean {
 
                 toPilotRepository.save(toPilot);
             }
+
         }
     }
 }
