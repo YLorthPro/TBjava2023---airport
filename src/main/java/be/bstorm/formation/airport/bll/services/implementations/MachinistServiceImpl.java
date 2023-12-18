@@ -6,6 +6,8 @@ import be.bstorm.formation.airport.dal.repositories.MachinistRepository;
 import be.bstorm.formation.airport.dal.repositories.PlaneTypeRepository;
 import be.bstorm.formation.airport.pl.models.forms.MachinistForm;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,8 +28,8 @@ public class MachinistServiceImpl implements MachinistService {
     }
 
     @Override
-    public List<MachinistEntity> getAll() {
-        return machinistRepository.findAll();
+    public Page<MachinistEntity> getAll(Pageable pageable) {
+        return machinistRepository.findAll(pageable);
     }
 
 

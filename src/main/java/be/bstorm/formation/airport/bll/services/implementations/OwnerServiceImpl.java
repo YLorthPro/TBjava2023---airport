@@ -5,6 +5,8 @@ import be.bstorm.formation.airport.dal.models.OwnerEntity;
 import be.bstorm.formation.airport.dal.repositories.OwnerRepository;
 import be.bstorm.formation.airport.pl.models.forms.OwnerForm;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,8 +22,8 @@ public class OwnerServiceImpl implements OwnerService {
     }
 
     @Override
-    public List<OwnerEntity> getAll() {
-        return ownerRepository.findAll();
+    public Page<OwnerEntity> getAll(Pageable pageable) {
+        return ownerRepository.findAll(pageable);
     }
 
     @Override

@@ -6,6 +6,7 @@ import be.bstorm.formation.airport.pl.models.dto.Pilot;
 import be.bstorm.formation.airport.pl.models.forms.PilotForm;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +24,8 @@ public class PilotController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Pilot>> getAll() {
-        return ResponseEntity.ok(pilotService.getAll().stream().map(Pilot::fromBll).toList());
+    public ResponseEntity<List<Pilot>> getAll(Pageable pageable) {
+        return ResponseEntity.ok(pilotService.getAll(pageable).stream().map(Pilot::fromBll).toList());
     }
 
     @GetMapping("/{id:[0-9]+}")

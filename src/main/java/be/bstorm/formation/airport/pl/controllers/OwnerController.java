@@ -6,6 +6,7 @@ import be.bstorm.formation.airport.pl.models.dto.Owner;
 import be.bstorm.formation.airport.pl.models.forms.OwnerForm;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,8 +23,8 @@ public class OwnerController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Owner>> getAll() {
-        return ResponseEntity.ok(ownerService.getAll().stream()
+    public ResponseEntity<List<Owner>> getAll(Pageable pageable) {
+        return ResponseEntity.ok(ownerService.getAll(pageable).stream()
                 .map(Owner::fromBll)
                 .toList());
     }

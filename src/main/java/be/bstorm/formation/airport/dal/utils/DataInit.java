@@ -7,11 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import com.github.javafaker.Faker;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
-
 @Component
 public class DataInit implements InitializingBean {
 

@@ -5,6 +5,8 @@ import be.bstorm.formation.airport.dal.models.PlaneTypeEntity;
 import be.bstorm.formation.airport.dal.repositories.PlaneTypeRepository;
 import be.bstorm.formation.airport.pl.models.forms.PlaneTypeForm;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,8 +23,8 @@ public class PlaneTypeServiceImpl implements PlaneTypeService {
 
 
     @Override
-    public List<PlaneTypeEntity> getAll() {
-        return planeTypeRepository.findAll();
+    public Page<PlaneTypeEntity> getAll(Pageable pageable) {
+        return planeTypeRepository.findAll(pageable);
     }
 
 

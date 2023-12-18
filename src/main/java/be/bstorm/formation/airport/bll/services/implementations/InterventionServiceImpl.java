@@ -7,6 +7,8 @@ import be.bstorm.formation.airport.dal.repositories.MachinistRepository;
 import be.bstorm.formation.airport.dal.repositories.PlaneRepository;
 import be.bstorm.formation.airport.pl.models.forms.InterventionForm;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,8 +30,8 @@ public class InterventionServiceImpl implements InterventionService {
     }
 
     @Override
-    public List<InterventionEntity> getAll() {
-        return interventionRepository.findAll();
+    public Page<InterventionEntity> getAll(Pageable pageable) {
+        return interventionRepository.findAll(pageable);
     }
 
     @Override

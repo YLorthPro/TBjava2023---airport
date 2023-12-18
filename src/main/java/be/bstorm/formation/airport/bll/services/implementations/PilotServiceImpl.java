@@ -13,7 +13,9 @@ import be.bstorm.formation.airport.pl.models.dto.Pilot;
 import be.bstorm.formation.airport.pl.models.dto.PlaneType;
 import be.bstorm.formation.airport.pl.models.forms.PilotForm;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -37,8 +39,8 @@ public class PilotServiceImpl implements PilotService {
 
 
     @Override
-    public List<PilotEntity> getAll() {
-        return pilotRepository.findAll();
+    public Page<PilotEntity> getAll(Pageable pageable) {
+        return pilotRepository.findAll(pageable);
     }
 
 

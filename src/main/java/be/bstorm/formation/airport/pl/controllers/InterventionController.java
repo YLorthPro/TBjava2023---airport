@@ -5,6 +5,7 @@ import be.bstorm.formation.airport.pl.models.dto.Intervention;
 import be.bstorm.formation.airport.pl.models.forms.InterventionForm;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,9 +22,15 @@ public class InterventionController {
         this.interventionService = interventionService;
     }
 
+    /*
+    Pageable => http://localhost:8080/planes/all?page=0&size=5&sort=numIma,desc
+    page = numéro de la page à consulter
+    size = taille de la page (nombre d'éléments par page
+    sort = critère de tri (ici selon numIma et par ordre décroissant)
+     */
     @GetMapping("/all")
-    public ResponseEntity<List<Intervention>> getAllInterventions() {
-        return ResponseEntity.ok(interventionService.getAll().stream()
+    public ResponseEntity<List<Intervention>> getAllInterventions(Pageable pageable) {
+        return ResponseEntity.ok(interventionService.getAll(pageable).stream()
                 .map(Intervention::fromBll)
                 .toList());
     }

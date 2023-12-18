@@ -5,6 +5,7 @@ import be.bstorm.formation.airport.pl.models.dto.Machinist;
 import be.bstorm.formation.airport.pl.models.forms.MachinistForm;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +22,8 @@ public class MachinistController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Machinist>> getAll() {
-        return ResponseEntity.ok(machinistService.getAll().stream()
+    public ResponseEntity<List<Machinist>> getAll(Pageable pageable) {
+        return ResponseEntity.ok(machinistService.getAll(pageable).stream()
                 .map(Machinist::fromBll)
                 .toList());
     }
