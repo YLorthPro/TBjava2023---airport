@@ -3,6 +3,7 @@ package be.bstorm.formation.airport.pl.controllers;
 import be.bstorm.formation.airport.bll.services.InterventionService;
 import be.bstorm.formation.airport.pl.models.dto.Intervention;
 import be.bstorm.formation.airport.pl.models.forms.InterventionForm;
+import be.bstorm.formation.airport.pl.models.forms.InterventionSearchForm;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
@@ -54,5 +55,10 @@ public class InterventionController {
     @DeleteMapping("/{id:[0-9]+}")
     public void deleteIntervention(@PathVariable Long id) {
         interventionService.deleteById(id);
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<List<Intervention>> search(@RequestBody InterventionSearchForm form){
+        return ResponseEntity.ok(interventionService.search(form).stream().map(Intervention::fromBll).toList());
     }
 }

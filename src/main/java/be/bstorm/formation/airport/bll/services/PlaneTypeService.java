@@ -2,6 +2,7 @@ package be.bstorm.formation.airport.bll.services;
 
 import be.bstorm.formation.airport.dal.models.PlaneTypeEntity;
 import be.bstorm.formation.airport.pl.models.forms.PlaneTypeForm;
+import be.bstorm.formation.airport.pl.models.forms.PlaneTypeSearchForm;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -14,4 +15,5 @@ public interface PlaneTypeService {
     Optional<PlaneTypeEntity> getById(Long id);
     void deleteById(Long id);
     void update (PlaneTypeForm form, Long id);
+    List<PlaneTypeEntity> search(PlaneTypeSearchForm form);
 }

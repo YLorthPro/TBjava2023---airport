@@ -44,5 +44,5 @@ public class InterventionEntity {
 
     @ManyToOne
     @JoinColumn(name = "plane_id")
-    private PlaneEntity planeEntity;
+    private PlaneEntity plane;
 }

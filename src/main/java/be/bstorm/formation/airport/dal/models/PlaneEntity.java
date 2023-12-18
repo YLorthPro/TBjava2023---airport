@@ -4,9 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Data
@@ -25,7 +23,7 @@ public class PlaneEntity {
     @JoinColumn(name = "plane_type_id")
     private PlaneTypeEntity planeTypeEntity;
 
-    @OneToMany(orphanRemoval = true, mappedBy = "planeEntity")
+    @OneToMany(orphanRemoval = true, mappedBy = "plane")
     private List<InterventionEntity> interventionEntities = new ArrayList<>();
 
 }

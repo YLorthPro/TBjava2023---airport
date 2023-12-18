@@ -13,11 +13,13 @@ import be.bstorm.formation.airport.pl.models.dto.Pilot;
 import be.bstorm.formation.airport.pl.models.dto.PlaneType;
 import be.bstorm.formation.airport.pl.models.forms.PilotForm;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -107,7 +109,7 @@ public class PilotServiceImpl implements PilotService {
         PilotEntity pilotEntity = pilotRepository.findById(pilotId).orElseThrow(()-> new EntityNotFoundException("Pilot not found"));
 
         // Tente de rechercher une entité "ToPilotEntity" existante dans la base de données en utilisant les entités "pilotEntity" et "planeTypeEntity" respectivement comme clé de pilote et type d'avion
-        ToPilotEntity toPilotEntity = toPilotRepository.findByPilotAndPlaneType(pilotEntity, planeTypeEntity)
+        ToPilotEntity toPilotEntity = toPilotRepository.findOne(specificationBuilder(pilotEntity.getId(), planeTypeEntity.getId()))
                 // Si aucune entité correspondante n'est trouvée, exécute la méthode orElseGet() qui crée une nouvelle entité
                 .orElseGet(()->{
                     // Création d'une nouvelle instance de ToPilotEntity
@@ -140,16 +142,32 @@ public class PilotServiceImpl implements PilotService {
     @Override
     public FlightResume getResume(Long pilotId) {
         PilotEntity pilot = pilotRepository.findById(pilotId).orElseThrow(() -> new EntityNotFoundException("Pilot not found"));
+
         HashMap<PlaneType, Integer> resume = new HashMap<>();
-        toPilotRepository.findByPilot(pilot)
+        toPilotRepository.findAll(specificationBuilder(pilotId, null))
                 .forEach(toPilotEntity -> resume.put(PlaneType.fromBll(toPilotEntity.getPlaneType()), toPilotEntity.getFlightsNumber()));
         return new FlightResume(Pilot.fromBll(pilot), resume);
     }
 
     @Override
     public void updateResume(Long pilotId, Long planeTypeId, int flightNumber) {
-        ToPilotEntity toPilotEntity = toPilotRepository.findByPilotAndPlaneType(pilotRepository.findById(pilotId).orElseThrow(() -> new EntityNotFoundException("Pilot not found")), planeTypeRepository.findById(planeTypeId).orElseThrow(() -> new EntityNotFoundException("Plane type not found"))).orElseThrow(() -> new EntityNotFoundException("Resume not found"));
+        ToPilotEntity toPilotEntity = toPilotRepository.findOne(specificationBuilder(pilotId,planeTypeId)).orElseThrow(()->new EntityNotFoundException("ToPilot not found"));
         toPilotEntity.setFlightsNumber(flightNumber);
         toPilotRepository.save(toPilotEntity);
+    }
+
+    private Specification<ToPilotEntity> specificationBuilder(Long pilotId, Long planeTypeId){
+
+        return (root, query, cb)->{
+            List<Predicate> predicates = new ArrayList<>();
+
+            predicates.add(cb.equal(root.get("pilote_id"), pilotId));
+
+            if(planeTypeId != null)
+                predicates.add(cb.equal(root.get("plane_type_id"),planeTypeId));
+
+            return cb.and(predicates.toArray(new Predicate[0]));
+        };
+
     }
 }

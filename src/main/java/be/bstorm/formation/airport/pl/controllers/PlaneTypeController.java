@@ -3,6 +3,7 @@ package be.bstorm.formation.airport.pl.controllers;
 import be.bstorm.formation.airport.bll.services.PlaneTypeService;
 import be.bstorm.formation.airport.pl.models.dto.PlaneType;
 import be.bstorm.formation.airport.pl.models.forms.PlaneTypeForm;
+import be.bstorm.formation.airport.pl.models.forms.PlaneTypeSearchForm;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
@@ -46,6 +47,11 @@ public class PlaneTypeController {
     @DeleteMapping("/{id:[0-9]+}")
     public void deleteById(@PathVariable Long id) {
         planeTypeService.deleteById(id);
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<List<PlaneType>> search(@RequestBody PlaneTypeSearchForm form){
+        return ResponseEntity.ok(planeTypeService.search(form).stream().map(PlaneType::fromBll).toList());
     }
 
 }

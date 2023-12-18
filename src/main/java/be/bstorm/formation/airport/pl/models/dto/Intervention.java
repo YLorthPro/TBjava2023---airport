@@ -20,7 +20,7 @@ public record Intervention(
                 entity.getDuration(),
                 Machinist.fromBll(entity.getVerifier()),
                 Machinist.fromBll(entity.getRepairman()),
-                Plane.fromBll(entity.getPlaneEntity())
+                Plane.fromBll(entity.getPlane())
         );
     }
 }

@@ -4,11 +4,15 @@ import be.bstorm.formation.airport.bll.services.PlaneTypeService;
 import be.bstorm.formation.airport.dal.models.PlaneTypeEntity;
 import be.bstorm.formation.airport.dal.repositories.PlaneTypeRepository;
 import be.bstorm.formation.airport.pl.models.forms.PlaneTypeForm;
+import be.bstorm.formation.airport.pl.models.forms.PlaneTypeSearchForm;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,5 +69,34 @@ public class PlaneTypeServiceImpl implements PlaneTypeService {
         planeTypeEntity.setSeatsNumber(form.seatsNumber());
 
         planeTypeRepository.save(planeTypeEntity);
+    }
+
+    @Override
+    public List<PlaneTypeEntity> search(PlaneTypeSearchForm form) {
+        return planeTypeRepository.findAll(specificationBuilder(form));
+    }
+
+    private Specification<PlaneTypeEntity> specificationBuilder(PlaneTypeSearchForm form){
+        return (root, query, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (form.name() != null) {
+                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), "%" + form.name().toLowerCase() + "%"));
+            }
+
+            if (form.builder() != null) {
+                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("builder")), "%" + form.builder().toLowerCase() + "%"));
+            }
+
+            if (form.power() > 0) {
+                predicates.add(criteriaBuilder.equal(root.get("power"), form.power()));
+            }
+
+            if (form.seatsNumber() > 0) {
+                predicates.add(criteriaBuilder.equal(root.get("seatsNumber"), form.seatsNumber()));
+            }
+
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        };
     }
 }
