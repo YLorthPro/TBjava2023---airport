@@ -1,0 +1,32 @@
+type Query {
+    planeTypeById(id: ID): PlaneType
+    planeById(numIma: String): Plane
+    planes: [Plane]
+    planeTypes: [PlaneType]
+    interventions: [Intervention]
+    interventionById(id: ID): Intervention
+}
+
+type PlaneType {
+    id: ID
+    name: String
+    builder: String
+    power: Int
+}
+
+type Plane {
+    numIma: String
+    planeTypeEntity: PlaneType
+    interventionEntities: [Intervention]
+}
+
+type Intervention{
+    id: ID
+    object: String
+    duration: Int
+    repairman: Machinist
+}
+
+type Machinist {
+    name: String
+}
