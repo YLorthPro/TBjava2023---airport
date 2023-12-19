@@ -1,5 +1,6 @@
 package be.bstorm.formation.airport.dal.models;
 
+import be.bstorm.formation.airport.dal.utils.AuditListenner;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -7,6 +8,7 @@ import java.time.LocalDate;
 
 @Entity
 @Data
+@EntityListeners(AuditListenner.class)
 @Table(name = "Intervention")
 public class InterventionEntity {
     @Id
