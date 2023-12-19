@@ -50,5 +50,10 @@ public class PlaneController {
     public void delete(@PathVariable String id) {
         planeService.deleteById(id);
     }
+
+    @PostMapping("/search")
+    public ResponseEntity<List<Plane>> search(@RequestParam(required = false) String numIma, @RequestParam(required = false) String ownerName) {
+        return ResponseEntity.ok(planeService.search(numIma, ownerName).stream().map(Plane::fromBll).toList());
+    }
 }
 

@@ -14,4 +14,5 @@ public interface PlaneService {
     Optional<PlaneEntity> getById(String id);
     void deleteById(String id);
     void update (PlaneForm form, String id);
+    List<PlaneEntity> search (String numIma, String ownerName);
 }

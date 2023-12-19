@@ -5,6 +5,7 @@ import be.bstorm.formation.airport.dal.models.PlaneEntity;
 import be.bstorm.formation.airport.dal.repositories.OwnerRepository;
 import be.bstorm.formation.airport.dal.repositories.PlaneRepository;
 import be.bstorm.formation.airport.dal.repositories.PlaneTypeRepository;
+import be.bstorm.formation.airport.dal.repositories.SpecificationBuilder;
 import be.bstorm.formation.airport.pl.models.forms.PlaneForm;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static be.bstorm.formation.airport.dal.repositories.SpecificationBuilder.specificationBuilder;
 
 @Service
 public class PlaneServiceImpl implements PlaneService {
@@ -65,7 +68,13 @@ public class PlaneServiceImpl implements PlaneService {
     }
 
     @Override
+    public List<PlaneEntity> search(String numIma, String ownerName) {
+        return planeRepository.findAll(specificationBuilder(numIma, ownerName));
+    }
+
+    @Override
     public void deleteById(String id) {
         planeRepository.deleteById(id);
     }
+
 }
