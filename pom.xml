@@ -10,12 +10,13 @@
 	</parent>
 	<groupId>be.bstorm.formation</groupId>
 	<artifactId>Airport</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>Airport</name>
 	<description>Airport</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
