@@ -37,5 +37,5 @@ services:
       - POSTGRES_DB=aeroport
       - POSTGRES_USERNAME=Moi
       - POSTGRES_PASSWORD=@Cloud2023
-      - DATA_INIT=true
+      - DATA_INIT=false
       - DDL=validate
