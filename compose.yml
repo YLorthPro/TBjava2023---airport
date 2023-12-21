@@ -2,6 +2,9 @@ version: '3.8'
 networks:
   aeroport:
 
+volumes:
+  data:
+
 services:
 
   db:
@@ -15,6 +18,8 @@ services:
       - '5432:5432'
     networks:
       - aeroport
+    volumes:
+      - data:/var/lib/postgresql/data
 
   backend:
     container_name: zaventem
@@ -26,9 +31,11 @@ services:
     networks:
       - aeroport
     environment:
+      - SPRING_PROFILES_ACTIVE=prod
       - POSTGRES_HOST=db
       - POSTGRES_PORT=5432
       - POSTGRES_DB=aeroport
       - POSTGRES_USERNAME=Moi
       - POSTGRES_PASSWORD=@Cloud2023
-      - COUCOU=true
+      - DATA_INIT=true
+      - DDL=validate

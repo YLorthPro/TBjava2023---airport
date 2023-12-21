@@ -25,4 +25,5 @@ RUN mvn clean install -DskipTests
 FROM openjdk:17
 ARG JAR_FILE=/app/target/*.jar
 COPY --from=builder ${JAR_FILE} aeroport.jar
+EXPOSE 8080
 ENTRYPOINT ["java","-jar", "/aeroport.jar"]

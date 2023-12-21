@@ -51,7 +51,7 @@ public class PlaneServiceImpl implements PlaneService {
         PlaneEntity entity = new PlaneEntity();
         entity.setNumIma(form.numIma());
         entity.setOwnerEntities(new ArrayList<>(ownerRepository.findAllById(form.ownersId())));
-        entity.setPlaneTypeEntity(planeTypeRepository.findById(entity.getPlaneTypeEntity().getId()).orElseThrow(() -> new EntityNotFoundException("Plane not found")));
+        entity.setPlaneTypeEntity(planeTypeRepository.findById(form.planeTypeId()).orElseThrow(() -> new EntityNotFoundException("Plane type not found")));
         planeRepository.save(entity);
     }
 
