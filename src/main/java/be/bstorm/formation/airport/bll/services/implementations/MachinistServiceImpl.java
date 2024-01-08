@@ -32,7 +32,6 @@ public class MachinistServiceImpl implements MachinistService {
         return machinistRepository.findAll(pageable);
     }
 
-
     @Override
     public Optional<MachinistEntity> getById(Long id) {
         return machinistRepository.findById(id);
